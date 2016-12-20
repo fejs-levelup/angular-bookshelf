@@ -5,14 +5,14 @@
     module("bookApp").
     component("bookApp", {
       template: `
-        <a href="new-book">Add new book</a><br>
+        <div class="nav"><a href="new-book">Add new book</a></div>
 
         <div class="book-container" ng-repeat="book in $ctrl.books">
           <h3>{{book.title}}</h3>
-          <p>{{book.author}}</p>
-          <img ng-src="book.bookCover" alt="" />
+          <img ng-src="http://theproactiveprogrammer.com/wp-content/uploads/2014/09/js_good_parts.png" alt="" />
           <p>{{book.rate}}</p>
-          <p>{{book.description}}</p>
+          <p>{{book.author}}</p>
+          <p>{{book.descroption}}</p>
         </div>
       `,
       controller: BookAppController
