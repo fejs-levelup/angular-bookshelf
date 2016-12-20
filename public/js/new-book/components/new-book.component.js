@@ -8,7 +8,9 @@
       controller: newBookController
     });
 
-  function newBookController() {
+  newBookController.$inject = ["$location"];
+
+  function newBookController($location) {
     let vm = this,
         cover,
         bookRef = firebase.database().ref("Books");
@@ -19,6 +21,7 @@
     vm.addNewBook = addNewBook;
     vm.coverUrl = "";
     vm.createCover = createCover;
+    vm.navBack = navBack;
 
     function addNewBook(ev) {
       ev.preventDefault();
@@ -47,6 +50,11 @@
               if(err) console.error(err);
             });
           });
+    }
+
+    function navBack(ev, url) {
+      ev.preventDefault();
+      $location.path(url);
     }
 
     function createCover(file) {

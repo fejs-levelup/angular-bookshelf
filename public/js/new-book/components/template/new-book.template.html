@@ -1,33 +1,33 @@
 	<div class="nav"> 
-		<a href="javascript:history.back()" class="nav-back">< Back</a>
-			<form id="new-book-form" action="" ng-submit="$ctrl.addNewBook($event)">
+		<a href="/" ng-click="$ctrl.navBack($event, '/')" class="nav-back">&lt; Back</a>
+		<form id="new-book-form" action="" ng-submit="$ctrl.addNewBook($event)">
 
-					<div>
-							<label for="book-title">Title: <input 
+				<div>
+						<label for="book-title">Title: <input 
+						type="text"
+						id="book-title"
+						ng-model="$ctrl.bookTitle" 
+						required/></label>
+
+						<label for="book-author">Author: <input
 							type="text"
-							id="book-title"
-							ng-model="$ctrl.bookTitle" 
-							required/></label>
+							id="book-author"
+							ng-model="$ctrl.bookAuthor"/></label>
 
-							<label for="book-author">Author: <input
-								type="text"
-								id="book-author"
-								ng-model="$ctrl.bookAuthor"/></label>
+						<div>
+							<label for="book-description">Description: </label>
+							<textarea 
+								name="book-description"
+								id="book-description"
+								cols="30" rows="10"
+								ng-model="$ctrl.bookDescription"
+								required></textarea>
+							</div>
+				</div>
 
-							<div>
-								<label for="book-description">Description: </label>
-								<textarea 
-									name="book-description"
-									id="book-description"
-									cols="30" rows="10"
-									ng-model="$ctrl.bookDescription"
-									required></textarea>
-								</div>
-					</div>
-
-					<image-uploader>
-						create-cover="$ctrl.createCover(file)"
-					</image-uploader>
-					<button id="new-book-button">Add new book</button>
-			</form>
+				<image-uploader>
+					create-cover="$ctrl.createCover(file)"
+				</image-uploader>
+				<button id="new-book-button">Add new book</button>
+		</form>
 	</div>

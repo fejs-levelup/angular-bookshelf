@@ -9,7 +9,7 @@
 
         <div class="book-container" ng-repeat="book in $ctrl.books">
           <h3>{{book.title}}</h3>
-          <img ng-src="http://theproactiveprogrammer.com/wp-content/uploads/2014/09/js_good_parts.png" alt="" />
+          <img ng-src="{{book.coverUrl}}" alt="" />
           <p>{{book.rate}}</p>
           <p>{{book.author}}</p>
           <p>{{book.descroption}}</p>
@@ -18,22 +18,36 @@
       controller: BookAppController
     });
 
-  BookAppController.$inject = ["$scope"];
+  BookAppController.$inject = ["$scope", "$timeout"];
 
-  function BookAppController($scope) {
+  function BookAppController($scope, $timeout) {
     let vm = this,
-        bookRef = firebase.database().ref("Books");
+        bookRef = firebase.database().ref("Books"),
+        storageRef = firebase.storage();
 
 
     vm.books = [];
+    vm.getCoverUrl = getCoverUrl;
+
+    function getCoverUrl(refUrl, book) {
+      storageRef.ref(refUrl).getDownloadURL().then(url => {
+        $scope.$apply(function() {
+          book.coverUrl = url;
+        });
+      });
+    }
 
     bookRef.on("value", function(snapshot) {
-      // vm.users.push(snapshot.val());
-      snapshot.forEach(function(subSnap) {
-        vm.books.push(subSnap.val());
+
+      $timeout(function() {
+        snapshot.forEach(function(subSnap) {
+          let book = subSnap.val();
+
+          getCoverUrl(book.cover, book);
+          vm.books.push(book);
+        });
       });
 
-      if(!$scope.$$phase) $scope.$apply();
     });
   }
 })();

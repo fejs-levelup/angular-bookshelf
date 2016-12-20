@@ -8,8 +8,8 @@
 				<div
 					id="dnd-container"
 					ng-style="{'background': $ctrl.imageUploaded ? 'url(' + $ctrl.imageUrl + ')50% 50%/ cover no-repeat' : '#fff' }">
-					<i class="fa fa-upload fa-3x" aria-hidden="true"></i>
-					<p>Drag & Drop files <br><br><br>Or</p>
+					<i class="fa fa-upload fa-3x" aria-hidden="true" ng-class="{ 'hidden-content': $ctrl.isHidden }"></i>
+					<p ng-class="{ 'hidden-content': $ctrl.isHidden }">Drag & Drop files <br><br><br>Or</p>
 					</div>
 				<label for="book-cover-select" name="book-cover-select">Browse</label>
 				<input id="book-cover-select" type="file" accept=".png,.jpg"/>
@@ -29,6 +29,7 @@
 			vm.selectCover = selectCover;
 			vm.imageUploaded = false;
 			vm.imageUrl = null;
+			vm.isHidden = false;
 
 			document.getElementById("book-cover-select").addEventListener("change", selectCover);
 			document.getElementById("dnd-container").addEventListener("dragover", cancelDrag, false);
@@ -64,7 +65,8 @@
 				function renderImage() {
 					vm.imageUrl = reader.result;
 					vm.imageUploaded = true;
-					document.getElementById("dnd-container").style.fontSize="0px";
+					vm.isHidden = true;
+					// document.getElementById("dnd-container").style.fontSize="0px";
 					$scope.$apply();
 				}
 

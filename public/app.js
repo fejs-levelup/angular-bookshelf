@@ -6,7 +6,8 @@
       "ngRoute",
       "appLogin",
       "appRegistration",
-      "newBook"
+      "newBook",
+      "bookView"
     ]).
     config(AppConfig).
     run(appRun);
@@ -33,6 +34,9 @@
         }).
         when("/new-book", {
           template: "<new-book></new-book>"
+        }).
+        when("/book/:bookId", {
+          template: "<book-view></book-view>"
         }).
         when("/", {
           template: "<book-app></book-app>"

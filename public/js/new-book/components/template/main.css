@@ -198,3 +198,7 @@ body {
 	text-align: center;
 	font-weight: normal;
 }
+
+.hidden-content {
+	visibility: hidden;
+}
