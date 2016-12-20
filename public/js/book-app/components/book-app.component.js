@@ -5,7 +5,7 @@
     module("bookApp").
     component("bookApp", {
       template: `
-        <div class="nav"><a href="new-book">Add new book</a></div>
+        <div class="nav"><a href="new-book" class="nav-click">Add new book</a></div>
 
         <div class="book-container" ng-repeat="book in $ctrl.books">
           <h3>{{book.title}}</h3>
