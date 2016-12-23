@@ -1,1 +1,4 @@
 @import url(../js/new-book/components/template/main.css);
+@import url(../js/book-view/components/templates/main.css);
+
+html, body { width: 100%; height: 100%; }

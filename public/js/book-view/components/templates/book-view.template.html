@@ -1,7 +1,17 @@
 <div class="book-view-container">
   <h1 class="book-title">{{$ctrl.book.title}}</h1>
-  <p class="book-view-author">{{$ctrl.book.author}}</p>
+  <p class="book-view-author">Author: <span>{{$ctrl.book.author}}</span></p>
   <img ng-src="{{$ctrl.book.coverUrl}}" alt="Book cover">
+  <div class="book-rates  ">
+    <i
+      ng-repeat="rate in $ctrl.book.rates track by $index"
+      ng-class="{'fa-bookmark-o': !rate, 'fa-bookmark': rate}"
+      ng-click="$ctrl.setRate($index + 1)"
+      class="fa"
+      aria-hidden="true"></i>
+    Avg: {{$ctrl.book.rate}}
+  </div>
   <p class="book-view-description">{{$ctrl.book.description}}</p>
-  <div>{{$ctrl.book.rate}}</div>
 </div>
+
+<book-comments></book-comments>

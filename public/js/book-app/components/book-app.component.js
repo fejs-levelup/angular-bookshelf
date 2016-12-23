@@ -18,12 +18,11 @@
       controller: BookAppController
     });
 
-  BookAppController.$inject = ["$scope", "$timeout", "$location"];
+  BookAppController.$inject = ["$scope", "$timeout", "$location", "bookAppService"];
 
-  function BookAppController($scope, $timeout, $location) {
+  function BookAppController($scope, $timeout, $location, bookAppService) {
     let vm = this,
-        bookRef = firebase.database().ref("Books"),
-        storageRef = firebase.storage();
+        bookRef = firebase.database().ref("Books");
 
 
     vm.books = [];
@@ -31,7 +30,7 @@
     vm.openBook = openBook;
 
     function getCoverUrl(refUrl, book) {
-      storageRef.ref(refUrl).getDownloadURL().then(url => {
+      bookAppService.getBookCover(refUrl, url => {
         $scope.$apply(function() {
           book.coverUrl = url;
         });

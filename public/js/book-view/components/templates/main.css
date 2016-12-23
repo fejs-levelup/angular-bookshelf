@@ -1,0 +1,40 @@
+book-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.book-view-container {
+  width: 400px;
+}
+
+h1.book-title {
+  text-align: center;
+}
+
+.book-view-author {
+  text-align: center;
+  font-style: italic;
+}
+
+.book-view-author span {
+  text-transform: uppercase;
+}
+
+.book-view-container img {
+  width: 100%;
+}
+
+.book-rates {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.book-rates i {
+  margin: 0 2px;
+  color: hotpink;
+  font-size: 24px;
+}
