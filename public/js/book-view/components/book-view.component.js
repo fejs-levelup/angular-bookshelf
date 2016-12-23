@@ -8,7 +8,9 @@
       controller: BookViewController
     });
 
-  BookViewController.$inject = [];
+  BookViewController.$inject = ["$routeParams"];
 
-  function BookViewController() {}
+  function BookViewController($routeParams) {
+    console.log($routeParams);
+  }
 })();
