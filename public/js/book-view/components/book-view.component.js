@@ -22,38 +22,44 @@
         ratesRef = firebase.database().ref(`BookRates/${id}`),
         booksRef = firebase.database().ref(`Books/${id}`);
 
-    // vm.$onInit = getBookData;
+    vm.$onInit = onInit;
     vm.$onDestroy = onDestroy;
     vm.setRate = setRate;
     vm.getAvgRate = rate => Math.round(rate);
+    vm.rate = 0;
+
+
+    function onInit() {
+      ratesRef.on("value", onGetRates);
+    }
+
+    function onGetRates(snapshot) {
+      let sum = 0,
+          l = snapshot.numChildren();
+
+      if(!l) return;
+
+      snapshot.forEach(function(childSnap) {
+        sum += childSnap.val();
+      });
+
+      // $scope.$apply(function() {
+        vm.rate = (sum / l).toPrecision(2);
+      // });
+    }
 
     function onDestroy() {
       booksRef.off("value");
+      ratesRef.off("value", onGetRates);
     }
 
     function setRate(rate) {
       let uid = firebase.auth().currentUser.uid;
 
       vm.userRate = rate;
-      $scope.$broadcast("userRate", {userRate: vm.userRate})
+      $scope.$broadcast("userRate", { userRate: vm.userRate })
 
-      ratesRef.child(uid).set(rate, function() {
-        ratesRef.once("value").then(function(snapshot) {
-          let result = 0,
-              length = snapshot.numChildren();
-
-          snapshot.forEach(function(childSnap) {
-            result += childSnap.val();
-          });
-
-          firebase.
-            database().
-            ref(`Books/${id}`).
-            child("rate").
-            set(result / length);
-        });
-        
-      });
+      ratesRef.child(uid).set(rate);
     }
 
     let userRateReq = new Promise(res => {

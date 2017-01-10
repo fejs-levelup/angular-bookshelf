@@ -50,6 +50,9 @@
           book.id = subSnap.key;
 
           getCoverUrl(book.cover, book);
+          bookAppService.getBookRate(book.id).then(function(res) {
+            book.rate = res;
+          });
           vm.books.push(book);
         });
       });

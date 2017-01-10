@@ -25,22 +25,24 @@
       controller: BookRatesController
     });
 
-  BookRatesController.inject = ["$scope"];
+  BookRatesController.inject = ["$scope", "$timeout"];
 
-  function BookRatesController($scope) {
+  function BookRatesController($scope, $timeout) {
     let vm = this,
         avgRate = vm.userRate || vm.avgRate;
 
     vm.rates = [];
 
-    $scope.$on("userRate", function(ev) {
+    $scope.$on("userRate", function(ev, data) {
       console.log(ev);
       vm.rates = [];
-      avgRate = vm.userRate;
-      for(let i = 1, l = vm.maxRates; i <= l; i += 1) {
-        vm.rates.push({ isMarked:  i <= avgRate });
-      }
-      $scope.$apply();
+      avgRate = data.userRate;
+
+      $timeout(function() {
+        for(let i = 1, l = vm.maxRates; i <= l; i += 1) {
+          vm.rates.push({ isMarked:  i <= avgRate });
+        }
+      });
     });
 
     for(let i = 1, l = vm.maxRates; i <= l; i += 1) {

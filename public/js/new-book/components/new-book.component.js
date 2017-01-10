@@ -42,8 +42,7 @@
               title: vm.bookTitle,
               author: vm.bookAuthor,
               description: vm.bookDescription,
-              cover: vm.coverUrl,
-              rate: 0
+              cover: vm.coverUrl
             };
 
             bookRef.push(book, function(err) {
