@@ -7,7 +7,8 @@
       "appLogin",
       "appRegistration",
       "newBook",
-      "bookView"
+      "bookView",
+      "bookRates"
     ]).
     config(AppConfig).
     run(appRun);

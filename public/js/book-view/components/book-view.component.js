@@ -19,35 +19,81 @@
     ) {
     let vm = this,
         id = $routeParams.bookId,
-        uid = firebase.auth().currentUser.uid,
-        ratesRef = firebase.database().ref(`BookRates/${id}`);
+        ratesRef = firebase.database().ref(`BookRates/${id}`),
+        booksRef = firebase.database().ref(`Books/${id}`);
 
-    vm.$onInit = getBookData;
+    // vm.$onInit = getBookData;
+    vm.$onDestroy = onDestroy;
     vm.setRate = setRate;
+    vm.getAvgRate = rate => Math.round(rate);
 
-    function setRate(rate) {
-      ratesRef.once("value").then(snapshot => {
-          let rates = {},
-              data = snapshot.val();
-
-          if(data) {
-            let result = 0,
-                dataLength = Object.keys(data).length;
-            for(let rate in data) result += data[rate];
-
-            $scope.$apply(function() {
-              vm.book.rate = (result + rate) / (dataLength + 1);
-            });
-
-            if(!(uid in data)) firebase.database().ref(`Books/${id}/rate`).set(vm.book.rate);
-          }
-
-          ratesRef.child(`${uid}`).set(rate);
-        });
+    function onDestroy() {
+      booksRef.off("value");
     }
 
-    function getBookData() {
-      firebase.database().ref(`Books/${id}`).once("value").then(snapshot => {
+    function setRate(rate) {
+      let uid = firebase.auth().currentUser.uid;
+
+      vm.userRate = rate;
+      $scope.$broadcast("userRate", {userRate: vm.userRate})
+
+      ratesRef.child(uid).set(rate, function() {
+        ratesRef.once("value").then(function(snapshot) {
+          let result = 0,
+              length = snapshot.numChildren();
+
+          snapshot.forEach(function(childSnap) {
+            result += childSnap.val();
+          });
+
+          firebase.
+            database().
+            ref(`Books/${id}`).
+            child("rate").
+            set(result / length);
+        });
+        
+      });
+    }
+
+    let userRateReq = new Promise(res => {
+      let uid = null,
+          currentUser = null;
+
+      function getUserId() {
+        currentUser = firebase.auth().currentUser;
+
+        if(!currentUser) window.requestAnimationFrame(getUserId);
+        else {
+          uid = currentUser.uid;
+          res(uid);
+        }
+      }
+
+      window.requestAnimationFrame(getUserId);
+    });
+
+    let getBookReq = new Promise(res => {
+      booksRef.on("value", snapshot => res(snapshot));
+    });
+
+    Promise.all([userRateReq, getBookReq]).then(function(res) {
+      let uid = res[0],
+          book = res[1];
+
+      ratesRef.child(uid).once("value").then(function(snapshot) {
+        $scope.$apply(function() {
+          vm.userRate = snapshot.val();
+        });
+
+        getBookData(book);
+      });
+    });
+
+    userRateReq.then(res => { console.log(res); });
+
+    function getBookData(snapshot) {
+
         vm.book = snapshot.val();
         vm.book.id = id;
         vm.book.rates = [];
@@ -64,8 +110,8 @@
           $scope.$apply(function() {
             vm.book.coverUrl = url;
           });
-        })
-      });
+        });
+
     }
   }
 })();
