@@ -7,8 +7,8 @@
       template: `
         <div class="nav"><a href="new-book" class="nav-click">Add new book</a></div>
 
-        <div class="book-container" ng-repeat="book in $ctrl.books">
-          <h3 ng-click="$ctrl.openBook(book.id)">{{book.title}}</h3>
+        <div class="book-container" ng-repeat="book in $ctrl.books | orderBy: 'title'">
+          <h3 ng-click="$ctrl.openBook(book.id)">{{book.title | uppercase | bookTitle}}</h3>
           <img ng-src="{{book.coverUrl}}" alt="" />
           <p>{{book.rate}}</p>
           <p>{{book.author}}</p>
