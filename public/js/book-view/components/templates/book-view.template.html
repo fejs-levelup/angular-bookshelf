@@ -13,4 +13,7 @@
   <p class="book-view-description">{{$ctrl.book.description}}</p>
 </div>
 
-<book-comments></book-comments>
+<book-comments
+  ng-if="$ctrl.book.id"
+  book-id="$ctrl.book.id"
+></book-comments>

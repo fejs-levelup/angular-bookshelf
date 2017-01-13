@@ -8,13 +8,14 @@
       "appRegistration",
       "newBook",
       "bookView",
-      "bookRates"
+      "bookRates",
+      "bookComments"
     ]).
     config(AppConfig).
     run(appRun);
 
     AppConfig.$inject = ["$routeProvider", "$locationProvider"];
-    appRun.$inject = ["$location", "$timeout"];
+    appRun.$inject = ["$location", "$timeout", "$rootScope"];
 
     function AppConfig($routeProvider, $locationProvider) {
       var config = {
@@ -46,12 +47,23 @@
       $locationProvider.html5Mode(true);
     }
 
-    function appRun($location, $timeout) {
+    function appRun($location, $timeout, $rootScope) {
       firebase.auth().onAuthStateChanged(function(user) {
         if(user) {
           $timeout(function() {
             $location.path("/");
           });
+          firebase.
+            database().
+            ref(`Users/${user.uid}`).
+            once("value").
+            then(function(snapshot) {
+              let currentUser = snapshot.val();
+
+              if(!currentUser) return;
+
+              $rootScope.currentUserName = currentUser.name;
+            });
         } else $location.path("/login");
       });
     }
